@@ -27,6 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Registro"
+                android:fontFamily="@font/lemonmilk_bold"
                 android:textColor="@color/white"
                 android:textSize="25dp"
                 android:textStyle="bold"
@@ -38,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ingresa tu nombre completo"
+                android:fontFamily="@font/caviardreams_bold"
                 android:textColor="@color/white"
                 android:textSize="15dp"
                 android:layout_marginTop="20dp"
@@ -58,6 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Iniciar"
+                android:fontFamily="@font/lemonmilk_bold"
                 android:textSize="15dp"
                 android:layout_marginBottom="20dp">
             </Button>

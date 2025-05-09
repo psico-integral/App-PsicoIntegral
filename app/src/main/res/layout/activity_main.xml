@@ -51,7 +51,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="Validar credenciales"
-        android:textColor="@color/white"
+        android:fontFamily="@font/lemonmilk_bold"
+          android:gravity="center"
+          android:textColor="@color/white"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -118,8 +120,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Entrar"
-        android:textSize="15dp"
-        android:layout_marginTop="10dp" />
+        android:fontFamily="@font/lemonmilk_bold"
+        android:layout_marginTop="10dp"/>
     </LinearLayout>
   </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

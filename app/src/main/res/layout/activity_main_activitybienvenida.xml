@@ -41,6 +41,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="Evaluación de riesgos Psico-sociales"
+                android:fontFamily="@font/lemonmilk_bold"
                 android:textColor="@color/white"
                 android:textSize="25dp"
                 android:textStyle="bold">
@@ -52,6 +53,7 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:text="Factores de riesgo psicosocial, Identificación, análisis y prevención. Así como para promover un entorno organizacional favorable en los centros de trabajo."
+                android:fontFamily="@font/caviardreams_light"
                 android:textColor="@color/white"
                 android:textSize="15dp">
             </TextView>
@@ -61,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="¿Qué es lo que recibes?"
+                android:fontFamily="@font/lemonmilk_bold"
                 android:textColor="@color/white"
                 android:textSize="15dp"
                 android:textStyle="bold">
@@ -72,6 +75,7 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:text="PORTAL ESPECIALIZADO EN EVALUACIONES PSICOSOCIALES"
+                android:fontFamily="@font/caviardreams_bold"
                 android:textColor="@color/white"
                 android:textSize="15dp">
             </TextView>
@@ -82,6 +86,7 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:text="El bienestar emocional y social es fundamental para el desarrollo personal y profesional, contamos con herramientas precisas y accesibles para evaluar estos aspectos indispensables. Este es un portal integral y seguro para realizar evaluaciones psicosociales de manera eficiente y confiable."
+                android:fontFamily="@font/caviardreams_light"
                 android:textColor="@color/white"
                 android:textSize="15dp">
             </TextView>
@@ -92,6 +97,7 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:text="¡Gran trabajo al dar el primer paso con esta experiencia de apoyo a la salud mental! ¡Bienvenido a bordo!"
+                android:fontFamily="@font/caviardreams_bold"
                 android:textColor="@color/white"
                 android:textSize="15dp"
                 android:textStyle="bold">
@@ -110,7 +116,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView2"
-        android:text="COMENCEMOS">
+        android:text="COMENCEMOS"
+        android:fontFamily="@font/lemonmilk_bold">
     </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
