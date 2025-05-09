@@ -12,12 +12,12 @@ fun obtenerCuestionarios(): Cuestionario {
             "cuestionario_01" to listOf(
                 Seccion(
                     mapOf(
-                        "01" to Pregunta("¿Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?", "si_no"),
-                        "02" to Pregunta("¿Asaltos?", "si_no"),
-                        "03" to Pregunta("¿Actos violentos que derivaron en lesiones graves?", "si_no"),
-                        "04" to Pregunta("¿Secuestro?", "si_no"),
-                        "05" to Pregunta("¿Amenazas?", "si_no"),
-                        "06" to Pregunta("¿Cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?", "si_no")
+                        "01" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como un accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?", "si_no"),
+                        "02" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como asaltos?", "si_no"),
+                        "03" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como actos violentos que derivaron en lesiones graves?", "si_no"),
+                        "04" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como un secuestro?", "si_no"),
+                        "05" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como una amenazas?", "si_no"),
+                        "06" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?", "si_no")
                     )
                 ),
                 Seccion(
