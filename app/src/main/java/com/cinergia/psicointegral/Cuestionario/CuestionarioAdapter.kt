@@ -12,8 +12,8 @@ class CuestionarioAdapter(
     private val preguntas: List<Pair<String, Pregunta>>,
     private val onRespuestaSeleccionada: (String, String) -> Unit,
     var respuestasGuardadas: Map<String, String>,
-    private val mostrarSoloPrimera: Boolean,
-    private var preguntasFaltantes: List<String> // ← la dejé como var para actualizarla después
+    private val onAvanzarPregunta: () -> Unit,
+    var indicePreguntaActual: Int
 ) : RecyclerView.Adapter<CuestionarioAdapter.PreguntaViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PreguntaViewHolder {
@@ -21,13 +21,13 @@ class CuestionarioAdapter(
         return PreguntaViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return if (mostrarSoloPrimera && preguntas.isNotEmpty()) 1 else preguntas.size
-    }
+    override fun getItemCount(): Int = 1
 
     override fun onBindViewHolder(holder: PreguntaViewHolder, position: Int) {
-        val (id, pregunta) = preguntas[position]
-        holder.bind(id, pregunta, preguntasFaltantes.contains(id)) // ← Pasamos si está faltando
+        if (indicePreguntaActual in preguntas.indices) {
+            val (id, pregunta) = preguntas[indicePreguntaActual]
+            holder.bind(id, pregunta)
+        }
     }
 
     fun actualizarRespuestas(nuevasRespuestas: Map<String, String>) {
@@ -35,24 +35,14 @@ class CuestionarioAdapter(
         notifyDataSetChanged()
     }
 
-    //
-    fun actualizarFaltantes(nuevasFaltantes: List<String>) {
-        preguntasFaltantes = nuevasFaltantes
-        notifyDataSetChanged()
-    }
-
     inner class PreguntaViewHolder(private val binding: ItemPreguntaBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(id: String, pregunta: Pregunta, estaFaltando: Boolean) {
+        fun bind(id: String, pregunta: Pregunta) {
             binding.textPregunta.text = pregunta.pregunta
-
-            val color = if (estaFaltando) {
-                ContextCompat.getColor(binding.root.context, R.color.rojo)
-            } else {
+            binding.textPregunta.setTextColor(
                 ContextCompat.getColor(binding.root.context, R.color.morado_oscuro)
-            }
-            binding.textPregunta.setTextColor(color)
+            )
 
             val radioGroup = binding.radioGroup
             radioGroup.removeAllViews()
@@ -83,9 +73,11 @@ class CuestionarioAdapter(
                     if (respuesta != selectedId) {
                         selectedId = respuesta
                         onRespuestaSeleccionada(id, respuesta)
+                        onAvanzarPregunta()
                     }
                 }
             }
         }
     }
 }
+

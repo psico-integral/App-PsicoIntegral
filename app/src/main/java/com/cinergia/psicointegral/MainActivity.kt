@@ -7,6 +7,7 @@ import android.text.InputType
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.cinergia.psicointegral.Bienvenida.Bienvenida
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -82,22 +83,36 @@ class MainActivity : AppCompatActivity() {
         val dataSnapshot = task.result
         var credencialesValidas = false
         var nombreEmpresa = ""
+        var empleadoKey: String? = null
+        var empleadoSnapshot: DataSnapshot? = null
 
-        dataSnapshot?.children?.forEach { empresa ->
-          val storedUsuario = empresa.child("usuario").getValue(String::class.java)
-          val storedContrasena = empresa.child("contrasena").getValue(String::class.java)
-          val storedNombre = empresa.child("nombre").getValue(String::class.java)
+        dataSnapshot?.children?.forEach { empleado ->
+          val storedUsuario = empleado.child("usuario").getValue(String::class.java)
+          val storedContrasena = empleado.child("contrasena").getValue(String::class.java)
 
           if (storedUsuario == usuario && storedContrasena == contrasena) {
+            empleadoKey = empleado.key
+            empleadoSnapshot = empleado
             credencialesValidas = true
-            nombreEmpresa = storedNombre ?: ""
           }
         }
 
-        if (credencialesValidas) {
-          Toast.makeText(this, "Login exitoso ✅", Toast.LENGTH_SHORT).show()
-          guardarNombreEmpresa(nombreEmpresa)
-          gotoBienvenida(nombreEmpresa)
+        if (credencialesValidas && empleadoSnapshot != null && empleadoKey != null) {
+          val limLogeo = empleadoSnapshot!!.child("limLogeo").getValue(Int::class.java) ?: 0
+          val noEmpresa = empleadoSnapshot!!.child("noEmpresa").getValue(String::class.java)?.toIntOrNull() ?: 0
+          val nombre = empleadoSnapshot!!.child("nombre").getValue(String::class.java) ?: ""
+
+          if (limLogeo >= noEmpresa) {
+            tvErrorCredenciales.text = "Has alcanzado el límite de accesos 🚫"
+            tvErrorCredenciales.visibility = TextView.VISIBLE
+          } else {
+            // Incrementar limLogeo en Firebase
+            empresaRef.child(empleadoKey!!).child("limLogeo").setValue(limLogeo + 1)
+
+            Toast.makeText(this, "Login exitoso ✅", Toast.LENGTH_SHORT).show()
+            guardarNombreEmpresa(nombre)
+            gotoBienvenida(nombre)
+          }
         } else {
           tvErrorCredenciales.text = "Usuario o contraseña incorrectos ⚠️"
           tvErrorCredenciales.visibility = TextView.VISIBLE
@@ -107,6 +122,7 @@ class MainActivity : AppCompatActivity() {
       }
     }
   }
+
 
   private fun guardarNombreEmpresa(nombreEmpresa: String) {
     val sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)

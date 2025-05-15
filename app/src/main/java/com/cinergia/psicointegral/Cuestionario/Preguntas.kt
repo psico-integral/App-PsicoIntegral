@@ -12,7 +12,7 @@ fun obtenerCuestionarios(): Cuestionario {
             "cuestionario_01" to listOf(
                 Seccion(
                     mapOf(
-                        "01" to Pregunta("¿Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?", "si_no"),
+                        "01" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como los siguientes: Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?", "si_no"),
                         "02" to Pregunta("¿Asaltos?", "si_no"),
                         "03" to Pregunta("¿Actos violentos que derivaron en lesiones graves?", "si_no"),
                         "04" to Pregunta("¿Secuestro?", "si_no"),

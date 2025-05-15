@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center"
-                android:text="Factores de riesgo psicosocial, Identificación, análisis y prevención. Así como para promover un entorno organizacional favorable en los centros de trabajo."
+                android:text="Factores de riesgo psicosocial, identificación, análisis y prevención. Así como para promover un entorno organizacional favorable en los centros de trabajo."
                 android:textColor="@color/white"
                 android:textSize="15dp">
             </TextView>

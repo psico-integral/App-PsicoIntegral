@@ -6,9 +6,9 @@
     android:padding="16dp"
     android:background="@color/morado_oscuro">
 
-    <!-- RecyclerView para mostrar las preguntas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -17,7 +17,6 @@
         android:scrollbarThumbVertical="@drawable/scrollbar_white"
         android:scrollbarSize="8dp" />
 
-    <!-- Este layout será visible solo cuando se termine el cuestionario -->
     <LinearLayout
         android:id="@+id/layoutFinal"
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="gone"
-        android:background="@drawable/borde_redondeado"> <!-- Inicialmente invisible -->
+        android:background="@drawable/borde_redondeado">
 
         <TextView
             android:id="@+id/txtFinalMensaje"

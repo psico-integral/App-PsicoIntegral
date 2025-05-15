@@ -44,12 +44,16 @@ class CuestionarioActivity : AppCompatActivity() {
         viewModel.claveActual.observe(this) { clave ->
             if (clave == "fin") {
                 mostrarPantallaFinal()
-                return@observe
+            } else {
+                actualizarAdapter()
             }
-            actualizarAdapter()
         }
 
         viewModel.indiceSeccion.observe(this) {
+            actualizarAdapter()
+        }
+
+        viewModel.indicePreguntaActual.observe(this) {
             actualizarAdapter()
         }
 
@@ -67,15 +71,6 @@ class CuestionarioActivity : AppCompatActivity() {
             adapter.actualizarRespuestas(it ?: emptyMap())
             binding.btnEnviarFinal.visibility = if ((it ?: emptyMap()).isNotEmpty()) View.VISIBLE else View.GONE
         }
-        viewModel.mensajeAdvertencia.observe(this) { mensaje ->
-            mensaje?.let {
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        viewModel.preguntasFaltantes.observe(this) { faltantes ->
-            adapter.actualizarFaltantes(faltantes)
-        }
 
         if (viewModel.indiceSeccion.value == 0) {
             viewModel.reiniciarCuestionario()
@@ -87,29 +82,27 @@ class CuestionarioActivity : AppCompatActivity() {
         binding.recyclerView.visibility = View.VISIBLE
 
         val clave = viewModel.claveActual.value ?: return
-        val indice = viewModel.indiceSeccion.value ?: 0
-        val mostrarSoloPrimera = viewModel.mostrarSoloPrimeraPregunta.value ?: false
+        val indiceSeccion = viewModel.indiceSeccion.value ?: 0
+        val indicePregunta = viewModel.indicePreguntaActual.value ?: 0
 
         val cuestionarios = obtenerCuestionarios().cuestionario
-        val seccionActual = cuestionarios[clave]?.getOrNull(indice)
+        val seccionActual = cuestionarios[clave]?.getOrNull(indiceSeccion) ?: return
+        val listaPreguntas = seccionActual.seccion.toList()
 
-        if (seccionActual != null) {
-            val listaPreguntas = seccionActual.seccion.toList()
+        adapter = CuestionarioAdapter(
+            preguntas = listaPreguntas,
+            onRespuestaSeleccionada = { id, respuesta ->
+                val tipo = seccionActual.seccion[id]?.tipo ?: "desconocido"
+                viewModel.guardarRespuesta(id, respuesta, tipo)
+            },
+            respuestasGuardadas = viewModel.respuestas.value ?: emptyMap(),
+            onAvanzarPregunta = {
+                viewModel.avanzarPregunta()
+            },
+            indicePreguntaActual = indicePregunta
+        )
 
-            adapter = CuestionarioAdapter(
-                preguntas = listaPreguntas,
-                onRespuestaSeleccionada = { id, respuesta ->
-                    val tipo = seccionActual.seccion[id]?.tipo ?: "desconocido"
-                    val esUltimaPregunta = id == listaPreguntas.last().first
-                    viewModel.guardarRespuesta(id, respuesta, tipo, evaluarAvance = esUltimaPregunta)
-                },
-                respuestasGuardadas = viewModel.respuestas.value ?: emptyMap(),
-                mostrarSoloPrimera = viewModel.mostrarSoloPrimeraPregunta.value == true,
-                preguntasFaltantes = viewModel.preguntasFaltantes.value ?: emptyList()
-            )
-
-            binding.recyclerView.adapter = adapter
-        }
+        binding.recyclerView.adapter = adapter
     }
 
     private fun mostrarPantallaFinal() {
@@ -117,5 +110,15 @@ class CuestionarioActivity : AppCompatActivity() {
         binding.layoutFinal.visibility = View.VISIBLE
         binding.txtFinalMensaje.text = "¡Felicidades! Has completado exitosamente el cuestionario."
     }
+
+    override fun onBackPressed() {
+        if (binding.layoutFinal.visibility == View.VISIBLE) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
 }
 

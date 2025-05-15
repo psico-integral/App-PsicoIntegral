@@ -44,5 +44,6 @@ class Registro : AppCompatActivity() {
         intent.putExtra("nombre_empresa", nombreEmpresa)
         intent.putExtra("nombre_empleado", nombreEmpleado)
         startActivity(intent)
+        finish()
     }
 }
