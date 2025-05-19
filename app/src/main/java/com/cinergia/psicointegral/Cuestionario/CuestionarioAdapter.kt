@@ -10,9 +10,9 @@ import com.cinergia.psicointegral.databinding.ItemPreguntaBinding
 
 class CuestionarioAdapter(
     private val preguntas: List<Pair<String, Pregunta>>,
-    private val onRespuestaSeleccionada: (String, String) -> Unit,
-    var respuestasGuardadas: Map<String, String>,
+    private val onRespuestaSeleccionada: (String, String, String) -> Unit,
     private val onAvanzarPregunta: () -> Unit,
+    var respuestasGuardadas: Map<String, String>,
     var indicePreguntaActual: Int
 ) : RecyclerView.Adapter<CuestionarioAdapter.PreguntaViewHolder>() {
 
@@ -45,36 +45,33 @@ class CuestionarioAdapter(
             )
 
             val radioGroup = binding.radioGroup
+            radioGroup.setOnCheckedChangeListener(null)
             radioGroup.removeAllViews()
 
-            val opciones = when (pregunta.tipo.lowercase()) {
+            val opciones = when (pregunta.tipo.lowercase().trim()) {
                 "si_no" -> listOf("Sí", "No")
                 "frecuencia" -> listOf("Nunca", "Rara vez", "Algunas veces", "Frecuentemente", "Siempre")
                 else -> listOf("No contestó")
             }
 
-            var selectedId = respuestasGuardadas[id] ?: ""
+            val selectedId = respuestasGuardadas[id]?.trim() ?: ""
 
-            for (opcion in opciones) {
+            opciones.forEach { opcion ->
                 val radioButton = RadioButton(binding.root.context).apply {
                     text = opcion
                     textSize = 16f
                     setTextColor(ContextCompat.getColor(context, R.color.morado_oscuro))
-                    isChecked = selectedId == opcion
+                    isChecked = opcion == selectedId
                 }
-
                 radioGroup.addView(radioButton)
             }
 
             radioGroup.setOnCheckedChangeListener { group, checkedId ->
                 val selected = group.findViewById<RadioButton>(checkedId)
-                if (selected != null) {
-                    val respuesta = selected.text.toString()
-                    if (respuesta != selectedId) {
-                        selectedId = respuesta
-                        onRespuestaSeleccionada(id, respuesta)
-                        onAvanzarPregunta()
-                    }
+                val respuesta = selected?.text?.toString()?.trim() ?: return@setOnCheckedChangeListener
+                if (respuesta != selectedId) {
+                    onRespuestaSeleccionada(id, respuesta, pregunta.tipo.trim())
+                    onAvanzarPregunta() // 👈 AVANZA A LA SIGUIENTE PREGUNTA
                 }
             }
         }

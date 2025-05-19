@@ -22,10 +22,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="¿Cuál es tu color favorito?"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textColor="@color/morado_oscuro"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginTop="8dp"
             tools:text="Pregunta" />
 
@@ -42,8 +42,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rojo"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp"
+                android:textSize="20sp"
+                android:layout_marginBottom="16dp"
                 android:buttonTint="@color/white"
                 android:buttonTintMode="@color/white"/>
 
@@ -52,9 +52,9 @@
                 android:id="@+id/radioOption2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:text="Azul"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:buttonTint="@color/white"
                 android:buttonTintMode="@color/white"/>
 
@@ -63,8 +63,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Verde"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp"
+                android:textSize="20sp"
+                android:layout_marginBottom="12dp"
                 android:buttonTint="@color/white"
                 android:buttonTintMode="@color/white"/>
         </RadioGroup>

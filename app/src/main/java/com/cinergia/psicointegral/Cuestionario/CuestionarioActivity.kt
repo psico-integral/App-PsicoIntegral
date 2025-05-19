@@ -49,22 +49,12 @@ class CuestionarioActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.indiceSeccion.observe(this) {
-            actualizarAdapter()
-        }
-
-        viewModel.indicePreguntaActual.observe(this) {
-            actualizarAdapter()
-        }
-
-        viewModel.mostrarSoloPrimeraPregunta.observe(this) {
-            actualizarAdapter()
-        }
+        viewModel.indiceSeccion.observe(this) { actualizarAdapter() }
+        viewModel.indicePreguntaActual.observe(this) { actualizarAdapter() }
+        viewModel.mostrarSoloPrimeraPregunta.observe(this) { actualizarAdapter() }
 
         viewModel.finalizado.observe(this) { terminado ->
-            if (terminado) {
-                mostrarPantallaFinal()
-            }
+            if (terminado) mostrarPantallaFinal()
         }
 
         viewModel.respuestas.observe(this) {
@@ -91,14 +81,13 @@ class CuestionarioActivity : AppCompatActivity() {
 
         adapter = CuestionarioAdapter(
             preguntas = listaPreguntas,
-            onRespuestaSeleccionada = { id, respuesta ->
-                val tipo = seccionActual.seccion[id]?.tipo ?: "desconocido"
+            onRespuestaSeleccionada = { id, respuesta, tipo ->
                 viewModel.guardarRespuesta(id, respuesta, tipo)
             },
-            respuestasGuardadas = viewModel.respuestas.value ?: emptyMap(),
             onAvanzarPregunta = {
                 viewModel.avanzarPregunta()
             },
+            respuestasGuardadas = viewModel.respuestas.value ?: emptyMap(),
             indicePreguntaActual = indicePregunta
         )
 
@@ -119,6 +108,6 @@ class CuestionarioActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
-
 }
+
 
