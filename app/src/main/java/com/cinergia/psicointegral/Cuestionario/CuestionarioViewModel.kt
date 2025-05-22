@@ -62,7 +62,6 @@ class CuestionarioViewModel : ViewModel() {
       if (clave == "cuestionario_01" && seccionIndex == 0 && _mostrarSoloPrimeraPregunta.value == true) {
         val respuestasActuales = _respuestas.value ?: mutableMapOf()
         val todasNo = preguntasSeccion.all { id -> respuestasActuales[id]?.lowercase()?.trim() == "no" }
-        guardarRespuestasEnFirebase(clave)
         if (todasNo) {
           guardarSinContestar()
           _claveActual.value = "fin"
@@ -85,10 +84,29 @@ class CuestionarioViewModel : ViewModel() {
     val copia = _respuestas.value ?: mutableMapOf()
     copia[id] = respuesta.trim()
     _respuestas.value = copia.toMutableMap()
+
+    guardarRespuestaEnFirebase(id, respuesta.trim())
+  }
+
+  private fun guardarRespuestaEnFirebase(idPregunta: String, respuestaTexto: String) {
+    val clave = _claveActual.value ?: return
+    val seccionIndex = _indiceSeccion.value ?: return
+    val seccionId = "seccion_${seccionIndex + 1}"
+    val respuestaNum = convertirRespuestaANumero(respuestaTexto)
+
+    val database = FirebaseDatabase.getInstance("https://psicointegral-usuariorespuesta-default-rtdb.firebaseio.com/")
+    val ref = database.reference
+      .child(nombreEmpresa)
+      .child(nombreEmpleado)
+      .child("respuestas")
+      .child(clave)
+      .child(seccionId)
+      .child(idPregunta)
+
+    ref.setValue(respuestaNum)
   }
 
   private fun manejarFlujoCuestionario02(seccionIndex: Int) {
-    guardarRespuestasEnFirebase("cuestionario_02")
     val idClave = cuestionariosMap[_claveActual.value]?.getOrNull(seccionIndex)?.seccion?.keys?.firstOrNull() ?: return
     val respuestaClave = _respuestas.value?.get(idClave)?.lowercase()?.trim() ?: return
 
@@ -96,12 +114,12 @@ class CuestionarioViewModel : ViewModel() {
       0 -> avanzarSeccion()
       1 -> {
         if (respuestaClave == "no") {
+          _indiceSeccion.value = 3
           limpiarRespuestasDeSeccion(2)
           limpiarRespuestasDeSeccion(3)
-          _indiceSeccion.value = 3
         } else {
-          limpiarRespuestasDeSeccion(2)
           _indiceSeccion.value = 2
+          limpiarRespuestasDeSeccion(2)
         }
         reiniciarIndicePregunta()
       }
@@ -109,8 +127,8 @@ class CuestionarioViewModel : ViewModel() {
         if (respuestaClave == "no") {
           avanzarCuestionario()
         } else {
-          limpiarRespuestasDeSeccion(4)
           _indiceSeccion.value = 4
+          limpiarRespuestasDeSeccion(4)
           reiniciarIndicePregunta()
         }
       }
@@ -120,19 +138,18 @@ class CuestionarioViewModel : ViewModel() {
   }
 
   private fun manejarFlujoCuestionario03(seccionIndex: Int) {
-    guardarRespuestasEnFirebase("cuestionario_03")
     val idClave = cuestionariosMap[_claveActual.value]?.getOrNull(seccionIndex)?.seccion?.keys?.firstOrNull() ?: return
     val respuestaClave = _respuestas.value?.get(idClave)?.lowercase()?.trim() ?: return
 
     when (seccionIndex) {
       1 -> {
         if (respuestaClave == "no") {
+          _indiceSeccion.value = 3
           limpiarRespuestasDeSeccion(2)
           limpiarRespuestasDeSeccion(3)
-          _indiceSeccion.value = 3
         } else {
-          limpiarRespuestasDeSeccion(2)
           _indiceSeccion.value = 2
+          limpiarRespuestasDeSeccion(2)
         }
         reiniciarIndicePregunta()
       }
@@ -141,8 +158,8 @@ class CuestionarioViewModel : ViewModel() {
           _claveActual.value = "fin"
           _finalizado.value = true
         } else {
-          limpiarRespuestasDeSeccion(4)
           _indiceSeccion.value = 4
+          limpiarRespuestasDeSeccion(4)
           reiniciarIndicePregunta()
         }
       }
@@ -156,7 +173,6 @@ class CuestionarioViewModel : ViewModel() {
 
   fun avanzarSeccion() {
     val clave = _claveActual.value ?: return
-    guardarRespuestasEnFirebase(clave)
     val indice = (_indiceSeccion.value ?: 0) + 1
     val secciones = cuestionariosMap[clave] ?: return
 
@@ -170,7 +186,6 @@ class CuestionarioViewModel : ViewModel() {
   }
 
   fun avanzarCuestionario() {
-    guardarRespuestasEnFirebase()
     val actual = clavesCuestionarios.indexOf(_claveActual.value)
     val siguiente = actual + 1
 
@@ -184,8 +199,22 @@ class CuestionarioViewModel : ViewModel() {
 
   private fun limpiarRespuestasDeSeccion(seccionIndex: Int) {
     val respuestasActuales = _respuestas.value ?: mutableMapOf()
-    val seccion = cuestionariosMap[_claveActual.value!!]?.getOrNull(seccionIndex)
-    seccion?.seccion?.keys?.forEach { idPregunta -> respuestasActuales.remove(idPregunta) }
+    val clave = _claveActual.value ?: return
+    val seccion = cuestionariosMap[clave]?.getOrNull(seccionIndex)
+
+    val database = FirebaseDatabase.getInstance("https://psicointegral-usuariorespuesta-default-rtdb.firebaseio.com/")
+    val refBase = database.reference
+      .child(nombreEmpresa)
+      .child(nombreEmpleado)
+      .child("respuestas")
+      .child(clave)
+      .child("seccion_${seccionIndex + 1}")
+
+    seccion?.seccion?.keys?.forEach { idPregunta ->
+      respuestasActuales.remove(idPregunta)
+      refBase.child(idPregunta).removeValue()
+    }
+
     _respuestas.value = respuestasActuales.toMutableMap()
   }
 
@@ -197,34 +226,7 @@ class CuestionarioViewModel : ViewModel() {
       .child("respuestas")
       .child("123")
 
-    ref.setValue("No contestó")
-  }
-
-  fun guardarRespuestasEnFirebase(clave: String = _claveActual.value.toString()) {
-    val respuestasMap = _respuestas.value ?: return
-    val secciones = cuestionariosMap[clave] ?: return
-
-    val estructura = mutableMapOf<String, MutableMap<String, Int>>()
-    var seccionIndex = 1
-    for (seccion in secciones) {
-      val idSeccion = "seccion_$seccionIndex"
-      val respuestasSeccion = mutableMapOf<String, Int>()
-      for ((idPregunta, _) in seccion.seccion) {
-        val respuestaTexto = respuestasMap[idPregunta]?.trim() ?: ""
-        respuestasSeccion[idPregunta] = convertirRespuestaANumero(respuestaTexto)
-      }
-      estructura[idSeccion] = respuestasSeccion
-      seccionIndex++
-    }
-
-    val database = FirebaseDatabase.getInstance("https://psicointegral-usuariorespuesta-default-rtdb.firebaseio.com/")
-    val ref = database.reference
-      .child(nombreEmpresa)
-      .child(nombreEmpleado)
-      .child("respuestas")
-      .child(clave)
-
-    ref.setValue(estructura)
+    ref.setValue("0")
   }
 
   private fun convertirRespuestaANumero(respuesta: String): Int {
@@ -248,7 +250,6 @@ class CuestionarioViewModel : ViewModel() {
     reiniciarIndicePregunta()
   }
 }
-
 
 
 

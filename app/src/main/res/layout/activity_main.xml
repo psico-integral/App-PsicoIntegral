@@ -1,126 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/main"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  tools:context=".MainActivity"
-  android:background="@color/background">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/background">
+
+  <!-- Layout superior: Sin conexión -->
+  <LinearLayout
+      android:id="@+id/layoutSinInternet"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:padding="16dp"
+      android:gravity="center"
+      android:background="@android:color/holo_red_dark"
+      android:visibility="gone"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent">
+
+    <TextView
+        android:id="@+id/tvSinInternet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sin conexión a internet 📡"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnCerrarApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar app"
+        android:textAllCaps="false"
+        android:backgroundTint="@android:color/white"
+        android:textColor="@android:color/holo_red_dark" />
+  </LinearLayout>
 
   <!-- Logo -->
   <ImageView
-    android:layout_width="160dp"
-    android:layout_height="160dp"
-    android:src="@drawable/logo"
-    app:layout_constraintBottom_toTopOf="@+id/cardView"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+      android:layout_width="160dp"
+      android:layout_height="160dp"
+      android:src="@drawable/logo"
+      app:layout_constraintBottom_toTopOf="@+id/cardView"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/layoutSinInternet" />
 
   <!-- CardView con formulario -->
   <androidx.cardview.widget.CardView
-    android:id="@+id/cardView"
-    android:layout_width="250dp"
-    android:layout_height="wrap_content"
-    android:background="@color/morado_oscuro"
-    app:cardCornerRadius="16dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+      android:id="@+id/cardView"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:background="@color/morado_oscuro"
+      app:cardCornerRadius="16dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/layoutSinInternet">
 
     <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:gravity="center"
-      android:background="@color/morado_oscuro"
-      android:padding="16dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/morado_oscuro"
+        android:padding="16dp">
 
       <ImageView
-        android:id="@+id/ItemUsuario"
-        android:layout_width="210dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/item_accout"
-        android:tint="@color/white" />
+          android:id="@+id/ItemUsuario"
+          android:layout_width="210dp"
+          android:layout_height="90dp"
+          android:layout_marginTop="20dp"
+          android:src="@drawable/item_accout"
+          android:tint="@color/white" />
 
       <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="Validar credenciales"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="20dp"
+          android:text="Validar credenciales"
+          android:textColor="@color/white"
+          android:textSize="20dp"
+          android:textStyle="bold" />
 
       <EditText
-        android:id="@+id/usuario"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:hint="Ingresa el usuario"
-        android:gravity="center"
-        android:background="@color/white"
-        android:textColor="@color/black" />
-
-      <TextView
-        android:id="@+id/tvErrorUsuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FF1B00"
-        android:visibility="gone" />
-
-      <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
-
-        <EditText
-          android:id="@+id/contrasena"
+          android:id="@+id/usuario"
           android:layout_width="match_parent"
           android:layout_height="40dp"
-          android:hint="Ingresa la contraseña"
-          android:inputType="textPassword"
+          android:layout_marginTop="5dp"
+          android:hint="Ingresa el usuario"
           android:gravity="center"
           android:background="@color/white"
-          android:textColor="@color/black"
-          android:paddingEnd="48dp" />
+          android:textColor="@color/black" />
+
+      <TextView
+          android:id="@+id/tvErrorUsuario"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#FF1B00"
+          android:visibility="gone" />
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="5dp">
+
+        <EditText
+            android:id="@+id/contrasena"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Ingresa la contraseña"
+            android:inputType="textPassword"
+            android:gravity="center"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:paddingEnd="48dp" />
 
         <ImageView
-          android:id="@+id/iconoVisibilidad"
-          android:layout_width="30dp"
-          android:layout_height="30dp"
-          android:layout_alignParentEnd="true"
-          android:layout_centerVertical="true"
-          android:layout_marginEnd="8dp"
-          android:src="@drawable/ic_visibility_off"
-          android:contentDescription="Toggle Password Visibility" />
+            android:id="@+id/iconoVisibilidad"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_visibility_off"
+            android:contentDescription="Toggle Password Visibility" />
       </RelativeLayout>
 
       <TextView
-        android:id="@+id/tvErrorContraseña"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FF1B00"
-        android:visibility="gone" />
+          android:id="@+id/tvErrorContrasena"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#FF1B00"
+          android:visibility="gone" />
 
       <TextView
-        android:id="@+id/tvErrorcredenciales"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FF1B00"
-        android:visibility="gone" />
+          android:id="@+id/tvErrorcredenciales"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#FF1B00"
+          android:visibility="gone" />
 
       <Button
-        android:id="@+id/btnEntrar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Entrar"
-        android:textSize="15dp"
-        android:layout_marginTop="10dp" />
+          android:id="@+id/btnEntrar"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Entrar"
+          android:textSize="15dp"
+          android:layout_marginTop="10dp" />
     </LinearLayout>
   </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

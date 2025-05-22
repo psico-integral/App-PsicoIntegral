@@ -9,5 +9,6 @@
     <color name="background">#b1a8b9</color>
     <color name="error_rojo">#901a0b</color>
     <color name="rojo">#FF0000</color>
+    <color name="opacidad_baja">#3B5A1B86</color>
 
 </resources>

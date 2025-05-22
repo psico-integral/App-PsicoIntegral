@@ -34,40 +34,34 @@
             android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
 
-            <!-- Opción 1 -->
             <RadioButton
+                style="@style/CustomRadioButton"
                 android:id="@+id/radioOption1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Rojo"
-                android:textSize="20sp"
-                android:layout_marginBottom="16dp"
-                android:buttonTint="@color/white"
-                android:buttonTintMode="@color/white"/>
+                android:layout_marginBottom="12dp"/>
 
-            <!-- Opción 3 -->
             <RadioButton
+                style="@style/CustomRadioButton"
                 android:id="@+id/radioOption2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:text="Azul"
-                android:textSize="20sp"
-                android:buttonTint="@color/white"
-                android:buttonTintMode="@color/white"/>
+                android:layout_marginBottom="12dp"/>
 
             <RadioButton
+                style="@style/CustomRadioButton"
                 android:id="@+id/radioOption3"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Verde"
-                android:textSize="20sp"
-                android:layout_marginBottom="12dp"
-                android:buttonTint="@color/white"
-                android:buttonTintMode="@color/white"/>
+                android:layout_marginBottom="12dp"/>
         </RadioGroup>
+
 
     </LinearLayout>
 

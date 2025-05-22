@@ -59,10 +59,21 @@ class CuestionarioAdapter(
             opciones.forEach { opcion ->
                 val radioButton = RadioButton(binding.root.context).apply {
                     text = opcion
-                    textSize = 16f
-                    setTextColor(ContextCompat.getColor(context, R.color.morado_oscuro))
+                    textSize = 20f
                     isChecked = opcion == selectedId
+                    setTextColor(ContextCompat.getColor(context, R.color.morado_oscuro))
+                    setPadding(16, 16, 16, 16)
+
+                    layoutParams = ViewGroup.MarginLayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        bottomMargin = 12
+                    }
+
+                    buttonTintList = ContextCompat.getColorStateList(context, R.color.morado_oscuro)
                 }
+
                 radioGroup.addView(radioButton)
             }
 
@@ -71,7 +82,7 @@ class CuestionarioAdapter(
                 val respuesta = selected?.text?.toString()?.trim() ?: return@setOnCheckedChangeListener
                 if (respuesta != selectedId) {
                     onRespuestaSeleccionada(id, respuesta, pregunta.tipo.trim())
-                    onAvanzarPregunta() // 👈 AVANZA A LA SIGUIENTE PREGUNTA
+                    onAvanzarPregunta()
                 }
             }
         }

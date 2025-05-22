@@ -34,7 +34,6 @@ class CuestionarioActivity : AppCompatActivity() {
         binding.recyclerView.scrollBarFadeDuration = 0
 
         binding.btnEnviarFinal.setOnClickListener {
-            viewModel.guardarRespuestasEnFirebase()
             Toast.makeText(this, "Respuestas enviadas correctamente", Toast.LENGTH_SHORT).show()
             viewModel.reiniciarCuestionario()
             finish()
@@ -109,5 +108,6 @@ class CuestionarioActivity : AppCompatActivity() {
         }
     }
 }
+
 
 

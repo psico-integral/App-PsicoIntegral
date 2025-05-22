@@ -2,6 +2,9 @@ package com.cinergia.psicointegral
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.text.InputType
 import android.widget.*
@@ -17,28 +20,40 @@ class MainActivity : AppCompatActivity() {
   private lateinit var contrasenaEditText: EditText
   private lateinit var iconoVisibilidad: ImageView
   private lateinit var tvErrorUsuario: TextView
-  private lateinit var tvErrorContraseña: TextView
+  private lateinit var tvErrorContrasena: TextView
   private lateinit var tvErrorCredenciales: TextView
   private lateinit var database: FirebaseDatabase
   private lateinit var empresaRef: DatabaseReference
   private var esVisible = false
 
+  private lateinit var layoutSinInternet: LinearLayout
+  private lateinit var btnCerrarApp: Button
+  private lateinit var btnEntrar: Button
+
+  private lateinit var connectivityManager: ConnectivityManager
+  private lateinit var networkCallback: ConnectivityManager.NetworkCallback
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    layoutSinInternet = findViewById(R.id.layoutSinInternet)
+    btnCerrarApp = findViewById(R.id.btnCerrarApp)
     usuarioEditText = findViewById(R.id.usuario)
     contrasenaEditText = findViewById(R.id.contrasena)
     iconoVisibilidad = findViewById(R.id.iconoVisibilidad)
     tvErrorUsuario = findViewById(R.id.tvErrorUsuario)
-    tvErrorContraseña = findViewById(R.id.tvErrorContraseña)
+    tvErrorContrasena = findViewById(R.id.tvErrorContrasena)
     tvErrorCredenciales = findViewById(R.id.tvErrorcredenciales)
-    val btnEntrar = findViewById<Button>(R.id.btnEntrar)
+    btnEntrar = findViewById(R.id.btnEntrar)
 
     database = FirebaseDatabase.getInstance("https://psicointegral-encuestas-default-rtdb.firebaseio.com/")
     empresaRef = database.reference.child("empresa")
 
-    // Alternar visibilidad de la contraseña
+    btnCerrarApp.setOnClickListener {
+      finishAffinity()
+    }
+
     iconoVisibilidad.setOnClickListener {
       esVisible = !esVisible
       if (esVisible) {
@@ -48,12 +63,45 @@ class MainActivity : AppCompatActivity() {
         contrasenaEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         iconoVisibilidad.setImageResource(R.drawable.ic_visibility_off)
       }
-      contrasenaEditText.setSelection(contrasenaEditText.text.length) // Mantener cursor
+      contrasenaEditText.setSelection(contrasenaEditText.text.length)
     }
+
+    connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    networkCallback = object : ConnectivityManager.NetworkCallback() {
+      override fun onAvailable(network: Network) {
+        runOnUiThread {
+          habilitarControles(true)
+          layoutSinInternet.visibility = LinearLayout.GONE
+        }
+      }
+
+      override fun onLost(network: Network) {
+        runOnUiThread {
+          habilitarControles(false)
+          layoutSinInternet.visibility = LinearLayout.VISIBLE
+        }
+      }
+    }
+
+    val networkRequest = NetworkRequest.Builder().build()
+    connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+
+    val tieneInternet = hayInternet()
+    habilitarControles(tieneInternet)
+    layoutSinInternet.visibility = if (tieneInternet) LinearLayout.GONE else LinearLayout.VISIBLE
 
     btnEntrar.setOnClickListener {
       val usuario = usuarioEditText.text.toString().trim()
       val contrasena = contrasenaEditText.text.toString().trim()
+
+      if (!hayInternet()) {
+        layoutSinInternet.visibility = LinearLayout.VISIBLE
+        habilitarControles(false)
+        return@setOnClickListener
+      } else {
+        layoutSinInternet.visibility = LinearLayout.GONE
+      }
 
       if (usuario.isNotEmpty() && contrasena.isNotEmpty()) {
         validarCredenciales(usuario, contrasena)
@@ -63,14 +111,27 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  private fun habilitarControles(habilitar: Boolean) {
+    usuarioEditText.isEnabled = habilitar
+    contrasenaEditText.isEnabled = habilitar
+    btnEntrar.isEnabled = habilitar
+    iconoVisibilidad.isEnabled = habilitar
+  }
+
+  private fun hayInternet(): Boolean {
+    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkInfo = connectivityManager.activeNetworkInfo
+    return networkInfo != null && networkInfo.isConnected
+  }
+
   private fun mostrarErrores(usuario: String, contrasena: String) {
     tvErrorUsuario.visibility = if (usuario.isEmpty()) {
       tvErrorUsuario.text = "El usuario es requerido"
       TextView.VISIBLE
     } else TextView.GONE
 
-    tvErrorContraseña.visibility = if (contrasena.isEmpty()) {
-      tvErrorContraseña.text = "La contraseña es requerida"
+    tvErrorContrasena.visibility = if (contrasena.isEmpty()) {
+      tvErrorContrasena.text = "La contraseña es requerida"
       TextView.VISIBLE
     } else TextView.GONE
   }
@@ -106,7 +167,6 @@ class MainActivity : AppCompatActivity() {
             tvErrorCredenciales.text = "Has alcanzado el límite de accesos 🚫"
             tvErrorCredenciales.visibility = TextView.VISIBLE
           } else {
-            // Incrementar limLogeo en Firebase
             empresaRef.child(empleadoKey!!).child("limLogeo").setValue(limLogeo + 1)
 
             Toast.makeText(this, "Login exitoso ✅", Toast.LENGTH_SHORT).show()
@@ -123,7 +183,6 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-
   private fun guardarNombreEmpresa(nombreEmpresa: String) {
     val sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)
     sharedPreferences.edit().putString("nombre_empresa", nombreEmpresa).apply()
@@ -135,5 +194,12 @@ class MainActivity : AppCompatActivity() {
     startActivity(intent)
     finish()
   }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    connectivityManager.unregisterNetworkCallback(networkCallback)
+  }
 }
+
+
 
