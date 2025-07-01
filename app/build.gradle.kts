@@ -52,6 +52,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.android.gms:play-services-auth:20.1.0")
     implementation("org.mindrot:jbcrypt:0.4")
+    implementation(libs.androidx.activity)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

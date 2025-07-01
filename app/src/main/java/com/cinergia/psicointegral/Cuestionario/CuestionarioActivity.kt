@@ -101,10 +101,13 @@ class CuestionarioActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (binding.layoutFinal.visibility == View.VISIBLE) {
+            // Si ya finalizó, puede regresar al inicio
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
-            super.onBackPressed()
+            // Mientras contesta, no puede regresar
+            Toast.makeText(this, "No puede regresar durante el cuestionario.", Toast.LENGTH_SHORT).show()
+            // No llamamos a super.onBackPressed(), así que no hace nada
         }
     }
 }

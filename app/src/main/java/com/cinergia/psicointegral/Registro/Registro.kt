@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.cinergia.psicointegral.Cuestionario.CuestionarioActivity
 import com.cinergia.psicointegral.R
+import com.cinergia.psicointegral.Terminos.Terminos
 
 class Registro : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,12 +35,11 @@ class Registro : AppCompatActivity() {
             } else {
                 Empleado.error = "Por favor ingresa tu nombre"
             }
-            goToEncuesta(nombreEmpleado, nombreEmpresa)
         }
     }
 
     private fun goToEncuesta(nombreEmpleado: String?, nombreEmpresa: String?) {
-        val intent = Intent(this, CuestionarioActivity::class.java)
+        val intent = Intent(this, Terminos::class.java)
         intent.putExtra("nombre_empresa", nombreEmpresa)
         intent.putExtra("nombre_empleado", nombreEmpleado)
         startActivity(intent)
