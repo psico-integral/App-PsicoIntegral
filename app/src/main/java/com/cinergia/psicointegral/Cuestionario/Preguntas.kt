@@ -13,11 +13,11 @@ fun obtenerCuestionarios(): Cuestionario {
                 Seccion(
                     mapOf(
                         "01" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como los siguientes: Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?", "si_no"),
-                        "02" to Pregunta("¿Asaltos?", "si_no"),
-                        "03" to Pregunta("¿Actos violentos que derivaron en lesiones graves?", "si_no"),
-                        "04" to Pregunta("¿Secuestro?", "si_no"),
-                        "05" to Pregunta("¿Amenazas?", "si_no"),
-                        "06" to Pregunta("¿Cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?", "si_no")
+                        "02" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo, asaltos?", "si_no"),
+                        "03" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo, actos violentos que derivaron en lesiones graves?", "si_no"),
+                        "04" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo, secuestro?", "si_no"),
+                        "05" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo, amenazas?", "si_no"),
+                        "06" to Pregunta("¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo, cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?", "si_no")
                     )
                 ),
                 Seccion(
@@ -29,7 +29,7 @@ fun obtenerCuestionarios(): Cuestionario {
                 Seccion(
                     mapOf(
                         "01" to Pregunta("¿Se ha esforzado por evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?", "si_no"),
-                        "02" to Pregunta("¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?", "si_no"),
+                        "02" to Pregunta("¿Se ha esforzado por evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?", "si_no"),
                         "03" to Pregunta("¿Ha tenido dificultad para recordar alguna parte importante del evento?", "si_no"),
                         "04" to Pregunta("¿Ha disminuido su interés en sus actividades cotidianas?", "si_no"),
                         "05" to Pregunta("¿Se ha sentido usted alejado o distante de los demás?", "si_no"),
